@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import  SfCamera from './components/SfCamera/SfCamera';
 import Chips from './components/Chips/Chips';
+import Main from "./components/Main";
 
 export default class App extends React.Component {
  
@@ -22,7 +23,7 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.camera}>
-          <SfCamera></SfCamera>
+          <Main></Main>
         </View>
         <View style={styles.tags}>
           <Chips items={this.state.chipData}></Chips>
