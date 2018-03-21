@@ -30,10 +30,10 @@ export default class Chips extends Component {
     }
     renderChip(data) {
         return (
-          <Chip key={data.label}
+          <Chip key={`${data}-${new Date()}`}
                 iconStyle={this.styles.chipIcon}
-                onClose={() => this.onChipClose(this.chipClose(data.label))}
-                text={data.label}
+                onClose={() => this.onChipClose(this.chipClose(data))}
+                text={data}
                 style={this.styles.chip}
             />
         );

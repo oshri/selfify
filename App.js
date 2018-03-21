@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import SfCamera from './components/SfCamera/SfCamera';
 import Chips from './components/Chips/Chips';
 
@@ -7,17 +7,20 @@ export default class App extends React.Component {
  
   constructor(props) {
     super(props);
+
     this.state = {
       isLoading: true,
-      chipData: [
-        {label: 'Melons'},
-        { label: 'Beach'},
-        {label: 'Watermelon im the bomba'},
-        {label: 'Ocean'},
-        {label: 'im the kebab'},
-        {label: 'no, im the kebab'},
-      ]
+      tags: []
     };
+
+    this.handleTagsResoults = this.handleTagsResoults.bind(this);
+
+  }
+
+  handleTagsResoults(tags) {
+    const newState = { ...this.state };
+    newState.tags = tags;
+    this.setState({...newState});
   }
 
 
@@ -25,12 +28,11 @@ export default class App extends React.Component {
     return (
       <View style={styles.container}>
         <View style={styles.camera}>
-          <SfCamera></SfCamera>
+          <SfCamera gettags={this.handleTagsResoults}></SfCamera>
         </View>
         <View style={styles.tags}>
-          <Chips items={this.state.chipData}></Chips>
+          <Chips items={this.state.tags}></Chips>
         </View>
-        <ActivityIndicator size="large" color="#0000ff" animating={this.state.isLoading}/>
       </View>);
   }
 }
@@ -49,7 +51,8 @@ const styles = StyleSheet.create({
   },
   tags: {
     width: '100%',
-    height: 100,
+    padding: 10,
+    height: 50,
     backgroundColor: 'powderblue'
   }
 });

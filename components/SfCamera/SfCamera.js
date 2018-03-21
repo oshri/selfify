@@ -7,11 +7,12 @@ import {
 	TouchableOpacity,
 	Slider,
 	Vibration,
-	NativeModules
+  NativeModules,
+  ActivityIndicator
 } from 'react-native';
 import GalleryScreen from '../GalleryScreen/GalleryScreen';
 import isIPhoneX from 'react-native-is-iphonex';
-import { checkForLabels, cloudAPi }  from '../../services/googleVision/googleVisionApi';
+import { checkForLabels }  from '../../services/googleVision/googleVisionApi';
 
 const landmarkSize = 2;
 
@@ -32,6 +33,7 @@ const wbOrder = {
 };
 
 export default class SfCameraScreen extends React.Component {
+
 	state = {
 		flash: 'off',
 		zoom: 0,
@@ -55,6 +57,8 @@ export default class SfCameraScreen extends React.Component {
 	}
 
 	componentDidMount() {
+    // const { gettags }  = this.props.gettags;
+
 		FileSystem.makeDirectoryAsync(
 			FileSystem.documentDirectory + 'photos'
 		).catch(e => {
@@ -111,11 +115,11 @@ export default class SfCameraScreen extends React.Component {
         });
 
         const base = data.base64;
-        cloudAPi(base).then((res) =>{
+        checkForLabels(base).then((res) =>{
           this.setState({
             isLoading: false
           });
-          console.log(res);
+          this.props.gettags(res);
         });
 
 				// FileSystem.moveAsync({
@@ -131,8 +135,6 @@ export default class SfCameraScreen extends React.Component {
 		}
   };
   
-  
-
 	renderGallery() {
 		return <GalleryScreen onPress={this.toggleView.bind(this)} />;
 	}
@@ -268,7 +270,12 @@ export default class SfCameraScreen extends React.Component {
 		const content = this.state.showGallery
 			? this.renderGallery()
 			: cameraScreenContent;
-		return <View style={styles.container}>{content}</View>;
+    return (
+      <View style={styles.container}>
+        {content}
+        <ActivityIndicator size="large" color="#0000ff" animating={this.state.isLoading}/>
+      </View>
+    );
 	}
 }
 
