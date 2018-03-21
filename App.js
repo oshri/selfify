@@ -1,20 +1,23 @@
 import React from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
-import  SfCamera from './components/SfCamera/SfCamera';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
+import SfCamera from './components/SfCamera/SfCamera';
 import Chips from './components/Chips/Chips';
 
 export default class App extends React.Component {
  
   constructor(props) {
     super(props);
-    this.state = {chipData: [
-      {label: 'Melons'},
-      { label: 'Beach'},
-      {label: 'Watermelon im the bomba'},
-      {label: 'Ocean'},
-      {label: 'im the kebab'},
-      {label: 'no, im the kebab'},
-    ]};
+    this.state = {
+      isLoading: true,
+      chipData: [
+        {label: 'Melons'},
+        { label: 'Beach'},
+        {label: 'Watermelon im the bomba'},
+        {label: 'Ocean'},
+        {label: 'im the kebab'},
+        {label: 'no, im the kebab'},
+      ]
+    };
   }
 
 
@@ -27,8 +30,9 @@ export default class App extends React.Component {
         <View style={styles.tags}>
           <Chips items={this.state.chipData}></Chips>
         </View>
+        <ActivityIndicator size="large" color="#0000ff" animating={this.state.isLoading}/>
       </View>);
-    }
+  }
 }
 
 const styles = StyleSheet.create({

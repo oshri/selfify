@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import Chip from '..//Chip/Chip';
+import Chip from '../Chip/Chip';
 
 export default class Chips extends Component {
 
@@ -19,22 +19,23 @@ export default class Chips extends Component {
         onChipClose: () => {},
     }
 
+
+    chipClose(chip){
+        console.log(chip)
+    }
+
     onChipClose = onClose => {
         const { onChipClose } = this.props;
         const { error } = this.state;
-
-    //    onChipClose(!error && this.getSelectedEmails().length > 1);
-        onClose();
     }
     renderChip(data) {
         return (
-          <Chip
-          key={data.label}
-          iconStyle={this.styles.chipIcon}
-          onClose={() => this.onChipClose(onClose)}
-          text={data.label}
-          style={this.styles.chip}
-        />
+          <Chip key={data.label}
+                iconStyle={this.styles.chipIcon}
+                onClose={() => this.onChipClose(this.chipClose(data.label))}
+                text={data.label}
+                style={this.styles.chip}
+            />
         );
       }
     
@@ -42,14 +43,14 @@ export default class Chips extends Component {
     render() {
         const { items } = this.props;
         return ( 
-        <TouchableOpacity>
-        <View style={styles.listWrapper}>
+        <ScrollView 
+         horizontal={true}>
             {items.map(this.renderChip, this)}
-        </View>
-        </TouchableOpacity>
+        </ScrollView>
     );
     }
 }
+//style={styles.listWrapper}
 const styles = StyleSheet.create({
     chip: {
         paddingRight: 2
