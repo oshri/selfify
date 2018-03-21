@@ -19,25 +19,24 @@ export default class App extends React.Component {
 
 
   render() {
-  return (
-    <View style={styles.container}>
-      <View style={styles.camera}>
-        <SfCamera></SfCamera>
-      </View>
-      <View>
-        <Chips items={this.state.chipData}></Chips>
-
-      </View>
-    </View>);
-  }
+    return (
+      <View style={styles.container}>
+        <View style={styles.camera}>
+          <SfCamera></SfCamera>
+        </View>
+        <View style={styles.tags}>
+          <Chips items={this.state.chipData}></Chips>
+        </View>
+      </View>);
+    }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: 'flex-start',
+    alignItems: 'stretch',
   },
   camera: {
     width: '100%',
