@@ -1,5 +1,9 @@
 // import fs from 'fs';
-import crypto from 'crypto';
+// import crypto from 'crypto';
+import sha256 from 'crypto-js/sha256';
+import hmacSHA512 from 'crypto-js/hmac-sha512';
+import Base64 from 'crypto-js/enc-base64';
+
 // import FormData from 'form-data';
 import querystring from 'querystring';
 import percentEncode from 'oauth-percent-encode';
@@ -40,8 +44,8 @@ var percentEncodeTwice = function (string) {
 };
 
 var createSignature = function (message, key) {
-	var hmac = crypto.createHmac('sha1', key);
-	var hash2 = hmac.update(message);
+	var hmac = hmacSHA512('sha1', key);
+	var hash2 = hmacSHA512(message);
 	var signature = hmac.digest(encoding = 'base64');
 	signature = querystring.escape(signature);
 	return signature;
