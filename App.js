@@ -4,6 +4,9 @@ import SfCamera from './components/SfCamera/SfCamera';
 import Chips from './components/Chips/Chips';
 import ExpoCarousel from './components/ExpoCarousel/ExpoCarousel';
 
+import { searchPhotos } from './services/flickr/flickrApi';
+
+
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 export default class App extends React.Component {
@@ -49,14 +52,32 @@ export default class App extends React.Component {
     };
 
     this.handleTagsResoults = this.handleTagsResoults.bind(this);
-
+    //this.handleImagesResults = this.handleImagesResults.bind(this);
   }
 
   handleTagsResoults(tags) {
     const newState = { ...this.state };
     newState.tags = tags;
     this.setState({...newState});
+    console.log('searching for '+tags.join(","));    
+    imageData = searchPhotos(tags.join(","));
+    //handleImagesResults(imageData);
+
+    console.log(imageData);
+    const newState2 = { ...this.state };
+    newState2.images = imageData;
+    this.setState({...newState2});
+
   }
+
+  handleImagesResults(imageData){
+    //console.log(imageData);
+    const newState = { ...this.state };
+    newState.images = imageData;
+    this.setState({...newState});
+
+  }
+
 
 
   render() {
