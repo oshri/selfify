@@ -4,8 +4,11 @@
   "dependencies": {
     "expo": "^25.0.0",
     "react": "16.2.0",
+    "native-base": "^2.3.7",
     "react-native": "https://github.com/expo/react-native/archive/sdk-25.0.0.tar.gz",
     "react-native-is-iphonex": "^1.0.1",
-    "react-native-snap-carousel": "^3.6.0"
+    "react-native-snap-carousel": "^3.6.0",
+    "react-navigation": "^1.0.0-beta.27",
+    "react-native-swiper": "^1.5.13"
   }
 }

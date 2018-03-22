@@ -8,9 +8,11 @@ import {
 	TouchableOpacity,
 	Slider,
 	Vibration,
-  NativeModules,
-  ActivityIndicator
+  	NativeModules,
+  	ActivityIndicator
 } from 'react-native';
+import { Container, Content, Header, Item, Icon, Input, Button } from 'native-base'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import GalleryScreen from '../GalleryScreen/GalleryScreen';
 import isIPhoneX from 'react-native-is-iphonex';
 import { checkForLabels }  from '../../services/googleVision/googleVisionApi';
@@ -50,8 +52,8 @@ export default class SfCameraScreen extends React.Component {
 		showGallery: false,
 		photos: [],
 		faces: [],
-    permissionsGranted: false,
-    isLoading: false
+    	permissionsGranted: false,
+    	isLoading: false
 	};
 
 	async componentWillMount() {
@@ -111,29 +113,33 @@ export default class SfCameraScreen extends React.Component {
 	}
 
 	takePicture = async function() {
-		if (this.camera) {
+		if (this.camera  && !this.state.isLoading) {
 			this.camera.takePictureAsync({ base64: true, quality: 0 }).then(data => {
-        this.setState({
-          isLoading: true
-        });
+			Vibration.vibrate();
 
-        const base = data.base64;
-        checkForLabels(base).then((res) =>{
-          this.setState({
-            isLoading: false
-          });
-          this.props.gettags(res);
-        });
+			this.setState({
+				isLoading: true
+			});
 
-				// FileSystem.moveAsync({
-				//   from: data.uri,
-				//   to: `${FileSystem.documentDirectory}photos/Photo_${this.state.photoId}.jpg`,
-				// }).then(() => {
-				//   this.setState({
-				//     photoId: this.state.photoId + 1,
-				//   });
-				//   Vibration.vibrate();
-				// });
+			const base = data.base64;
+			checkForLabels(base).then((res) =>{
+				this.setState({
+					isLoading: false
+				});
+				
+				this.props.gettags(res);
+			});
+
+			FileSystem.moveAsync({
+				from: data.uri,
+				to: `${FileSystem.documentDirectory}photos/Photo_${this.state.photoId}.jpg`,
+			}).then(() => {
+				this.setState({
+					photoId: this.state.photoId + 1,
+				});
+				Vibration.vibrate();
+			});
+
 			});
 		}
   };
@@ -160,111 +166,65 @@ export default class SfCameraScreen extends React.Component {
 	}
 
 	renderCamera() {
-		return (
-			<Camera
-				ref={ref => {
-					this.camera = ref;
-				}}
-				style={{
-					flex: 1
-				}}
-				type={this.state.type}
-				flashMode={this.state.flash}
-				autoFocus={this.state.autoFocus}
-				zoom={this.state.zoom}
-				whiteBalance={this.state.whiteBalance}
-				ratio={this.state.ratio}
-				focusDepth={this.state.depth}
-			>
-				<View
-					style={{
-						flex: 0.5,
-						backgroundColor: 'transparent',
-						flexDirection: 'row',
-						justifyContent: 'space-around',
-						paddingTop: Constants.statusBarHeight / 2
-					}}
-				>
-					<TouchableOpacity
-						style={styles.flipButton}
-						onPress={this.toggleFacing.bind(this)}
-					>
-						<Text style={styles.flipText}> FLIP </Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={styles.flipButton}
-						onPress={this.toggleFlash.bind(this)}
-					>
-						<Text style={styles.flipText}>
-							{' '}
-							FLASH: {this.state.flash}{' '}
-						</Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={styles.flipButton}
-						onPress={this.toggleWB.bind(this)}
-					>
-						<Text style={styles.flipText}>
-							{' '}
-							WB: {this.state.whiteBalance}{' '}
-						</Text>
-					</TouchableOpacity>
-				</View>
-				<View
-					style={{
-						flex: 0.4,
-						backgroundColor: 'transparent',
-						flexDirection: 'row',
-						alignSelf: 'flex-end',
-						marginBottom: -5
-					}}
-				>
-					{this.state.autoFocus !== 'on' ? (
-						<Slider
-							style={{
-								width: 150,
-								marginTop: 15,
-								marginRight: 15,
-								alignSelf: 'flex-end'
-							}}
-							onValueChange={this.setFocusDepth.bind(this)}
-							step={0.1}
-						/>
-					) : null}
-				</View>
-				<View
-					style={{
-						flex: 0.1,
-						paddingBottom: isIPhoneX ? 20 : 0,
-						backgroundColor: 'transparent',
-						flexDirection: 'row',
-						alignSelf: 'flex-end'
-					}}
-				>
-					<TouchableOpacity
-						style={[
-							styles.flipButton,
-							styles.picButton,
-							{ flex: 0.3, alignSelf: 'flex-end' }
-						]}
-						onPress={this.takePicture.bind(this)}
-					>
-						<Text style={styles.flipText}> SNAP </Text>
-					</TouchableOpacity>
-					<TouchableOpacity
-						style={[
-							styles.flipButton,
-							styles.galleryButton,
-							{ flex: 0.25, alignSelf: 'flex-end' }
-						]}
-						onPress={this.toggleView.bind(this)}
-					>
-						<Text style={styles.flipText}> Gallery </Text>
-					</TouchableOpacity>
-				</View>
-			</Camera>
-		);
-	}
+        const { permissionsGranted } = this.state
+
+        if (permissionsGranted === null) {
+            return <View />
+        }
+        else if (permissionsGranted === false) {
+            return <Text> No access to camera</Text>
+        }
+        else {
+            return (
+                <View style={{ flex: 1, position: 'relative' }}>
+					<Camera 
+						style={{ flex: 1, justifyContent: 'space-between' }}
+						ref={ref => {
+							this.camera = ref;
+						}}
+						type={this.state.type}
+						flashMode={this.state.flash}
+						autoFocus={this.state.autoFocus}
+						zoom={this.state.zoom}
+						whiteBalance={this.state.whiteBalance}
+						ratio={this.state.ratio}
+						focusDepth={this.state.depth}>
+
+                        <Header searchBar rounded
+                            style={{
+                                position: 'absolute', backgroundColor: 'transparent',
+                                left: 0, top: 0, right: 0, zIndex: 100, alignItems: 'center'
+                            }}>
+
+                            <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'space-around', paddingHorizontal: 10, marginBottom: 15, alignItems: 'flex-end' }}>
+								<TouchableOpacity onPress={this.toggleFacing.bind(this)}>
+									<Icon name="ios-reverse-camera" style={{ color: 'white' }} />
+								</TouchableOpacity>
+								<TouchableOpacity onPress={this.toggleFlash.bind(this)}>
+									<Icon name="ios-flash" style={{ color: 'white'}} />
+								</TouchableOpacity>
+                            </View>
+							<View style={{ flexDirection: 'row', flex: 1, justifyContent: 'space-around' }}>
+								<TouchableOpacity  onPress={this.toggleWB.bind(this)} >
+									<MaterialCommunityIcons name="google-circles-communities" style={{ color: 'white', fontSize: 36 }}>
+									</MaterialCommunityIcons>
+								</TouchableOpacity>
+                            </View>
+                        </Header>
+
+                        <View style={styles.snapcontainer}>
+							<TouchableOpacity onPress={this.takePicture.bind(this)}>
+								<MaterialCommunityIcons name="circle-outline" style={{ color: 'white', fontSize: 100 }}>
+								</MaterialCommunityIcons>
+							</TouchableOpacity>
+                        </View>
+                    </Camera>
+
+					<ActivityIndicator style={styles.spinner} size="large" color="#ffffff" animating={this.state.isLoading}/>
+                </View>
+            )
+        }
+    }
 
 	render() {
 		const cameraScreenContent = this.state.permissionsGranted
@@ -276,7 +236,6 @@ export default class SfCameraScreen extends React.Component {
     return (
       <View style={styles.container}>
         {content}
-        <ActivityIndicator style={styles.spinner} size="large" color="#0000ff" animating={this.state.isLoading}/>
       </View>
     );
 	}
@@ -284,9 +243,16 @@ export default class SfCameraScreen extends React.Component {
 
 const styles = StyleSheet.create({
 	container: {
-		flex: 1,
+        flex: 1,
 		backgroundColor: '#000',
 		position: 'relative'
+    },
+	snapcontainer: {
+		flexDirection: 'column',
+		justifyContent: 'space-between',
+		paddingHorizontal: 10,
+		marginBottom: 15,
+		alignItems: 'center'
 	},
 	spinner: {
 		position: 'absolute',

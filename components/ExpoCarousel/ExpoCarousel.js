@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     width: viewportWidth,
     flex: 1,
-    backgroundColor: 'powderblue',
     alignItems: 'center',
     justifyContent: 'center',
   },
