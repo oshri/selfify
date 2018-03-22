@@ -16,7 +16,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import GalleryScreen from '../GalleryScreen/GalleryScreen';
 import isIPhoneX from 'react-native-is-iphonex';
 import { checkForLabels }  from '../../services/googleVision/googleVisionApi';
-
+import ImageCard from '../ImageCard/ImageCard';
 const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 const landmarkSize = 2;
@@ -48,14 +48,14 @@ export default class SfCameraScreen extends React.Component {
 		whiteBalance: 'auto',
 		ratio: '16:9',
 		ratios: [],
-		photoId: 1,
+		photoId: 0,
 		showGallery: false,
 		photos: [],
 		faces: [],
-    	permissionsGranted: false,
-    	isLoading: false
+		permissionsGranted: false,
+		isLoading: false
 	};
-
+	
 	async componentWillMount() {
 		const { status } = await Permissions.askAsync(Permissions.CAMERA);
 		this.setState({ permissionsGranted: status === 'granted' });
@@ -106,11 +106,6 @@ export default class SfCameraScreen extends React.Component {
 		});
 	}
 
-	setFocusDepth(depth) {
-		this.setState({
-			depth
-		});
-	}
 
 	takePicture = async function() {
 		if (this.camera  && !this.state.isLoading) {
@@ -137,6 +132,11 @@ export default class SfCameraScreen extends React.Component {
 				this.setState({
 					photoId: this.state.photoId + 1,
 				});
+
+				this.setState({
+					showGallery: true
+				});
+
 				Vibration.vibrate();
 			});
 
@@ -146,6 +146,18 @@ export default class SfCameraScreen extends React.Component {
   
 	renderGallery() {
 		return <GalleryScreen onPress={this.toggleView.bind(this)} />;
+	}
+
+	closeImageCard() {
+		this.setState({
+			showGallery: false
+		});
+	}
+
+	renderCard() {
+		return <ImageCard 
+					image={`${FileSystem.documentDirectory}photos/Photo_${this.state.photoId}.jpg`}>
+				</ImageCard>
 	}
 
 	renderNoPermissions() {
@@ -177,6 +189,7 @@ export default class SfCameraScreen extends React.Component {
         else {
             return (
                 <View style={{ flex: 1, position: 'relative' }}>
+
 					<Camera 
 						style={{ flex: 1, justifyContent: 'space-between' }}
 						ref={ref => {
@@ -231,7 +244,7 @@ export default class SfCameraScreen extends React.Component {
 			? this.renderCamera()
 			: this.renderNoPermissions();
 		const content = this.state.showGallery
-			? this.renderGallery()
+			? this.renderCard()
 			: cameraScreenContent;
     return (
       <View style={styles.container}>

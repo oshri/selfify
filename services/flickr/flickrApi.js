@@ -15,6 +15,8 @@ const buildPhotoUrl = (photo) => {
 //<photo id="39106691150" owner="89165847@N00" secret="51383a2e65" server="810" farm="1" title="Friends Walking in Sunlight" ispublic="1" isfriend="0" isfamily="0"/>
     if (photo){
         url = 'https://farm'+photo.farm+'.staticflickr.com/'+photo.server+'/'+photo.id+'_'+photo.secret+'.jpg';
+        if (!photo.title) photo.title="";
+        if (!photo.owner) photo.owner="";
         photoUrls.push({title: photo.title,subtitle:photo.owner, illustration:url});
     }
     
@@ -36,7 +38,7 @@ export const searchPhotos = (tags) => {
                     }
             }
        // })
-        console.log(photoUrls)
+        //console.log(photoUrls)
         return photoUrls;
     });
 }

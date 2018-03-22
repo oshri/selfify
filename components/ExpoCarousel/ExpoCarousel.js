@@ -41,10 +41,12 @@ export default class ExpoCarousel extends React.Component {
   
   render() {
     const { images } = this.props;
+    const arr=[];
+    Object.keys(images).map(el => {arr.push(images[el])});
     return (
       <Carousel
         ref={(c) => { this._carousel = c; }}
-        data={images}
+        data={arr}
         renderItem={this._renderItem}
         sliderWidth={this.carouselState.sliderWidth}
         itemWidth={this.carouselState.itemWidth}

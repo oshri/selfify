@@ -23,38 +23,7 @@ export default class App extends React.Component {
     this.state = {
       isLoading: true,
       tags: [],
-      images: [
-        {
-            title: 'Beautiful and dramatic Antelope Canyon',
-            subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-            illustration: 'https://i.imgur.com/UYiroysl.jpg'
-        },
-        {
-            title: 'Earlier this morning, NYC',
-            subtitle: 'Lorem ipsum dolor sit amet',
-            illustration: 'https://i.imgur.com/UPrs1EWl.jpg'
-        },
-        {
-            title: 'White Pocket Sunset',
-            subtitle: 'Lorem ipsum dolor sit amet et nuncat ',
-            illustration: 'https://i.imgur.com/MABUbpDl.jpg'
-        },
-        {
-            title: 'Acrocorinth, Greece',
-            subtitle: 'Lorem ipsum dolor sit amet et nuncat mergitur',
-            illustration: 'https://i.imgur.com/KZsmUi2l.jpg'
-        },
-        {
-            title: 'The lone tree, majestic landscape of New Zealand',
-            subtitle: 'Lorem ipsum dolor sit amet',
-            illustration: 'https://i.imgur.com/2nCt3Sbl.jpg'
-        },
-        {
-            title: 'Middle Earth, Germany',
-            subtitle: 'Lorem ipsum dolor sit amet',
-            illustration: 'https://i.imgur.com/lceHsT6l.jpg'
-        }
-      ]
+      images: []
     };
 
     this.handleTagsResoults = this.handleTagsResoults.bind(this);
@@ -76,12 +45,14 @@ export default class App extends React.Component {
     newState.tags = tagResult;
     this.setState({...newState});
 
-    const imageData = searchPhotos(tagResult.join(","));
-    const newState2 = { ...this.state };
-    newState2.images = imageData;
-    this.setState({...newState2});
-  }
+    const imageData = searchPhotos(tagResult.join(",")).then((result)=>{
+      const newState2 = { ...this.state };
+      newState2.images = result;
+      this.setState({...newState2});
+    });
 
+  }
+ƒ
   render() {
     return (
       <Container style={styles.container}>
