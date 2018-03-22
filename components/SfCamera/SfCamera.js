@@ -12,7 +12,7 @@ import {
   	ActivityIndicator
 } from 'react-native';
 import { Container, Content, Header, Item, Icon, Input, Button } from 'native-base'
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import GalleryScreen from '../GalleryScreen/GalleryScreen';
 import isIPhoneX from 'react-native-is-iphonex';
 import { checkForLabels }  from '../../services/googleVision/googleVisionApi';
@@ -155,7 +155,8 @@ export default class SfCameraScreen extends React.Component {
 	}
 
 	renderCard() {
-		return <ImageCard 
+		return <ImageCard
+					loading={this.state.isLoading}
 					image={`${FileSystem.documentDirectory}photos/Photo_${this.state.photoId}.jpg`}>
 				</ImageCard>
 	}
@@ -232,8 +233,6 @@ export default class SfCameraScreen extends React.Component {
 							</TouchableOpacity>
                         </View>
                     </Camera>
-
-					<ActivityIndicator style={styles.spinner} size="large" color="#ffffff" animating={this.state.isLoading}/>
                 </View>
             )
         }
