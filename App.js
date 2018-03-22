@@ -55,25 +55,46 @@ export default class App extends React.Component {
     //this.handleImagesResults = this.handleImagesResults.bind(this);
   }
 
-  handleTagsResoults(tags) {
-    const newState = { ...this.state };
-    newState.tags = tags;
-    this.setState({...newState});
-    console.log('searching for '+tags.join(","));    
-    imageData = searchPhotos(tags.join(","));
-    //handleImagesResults(imageData);
+  filterSimmilarTags(tags) {
+    const result = [];
+    tags.filter((el, indx) => {
+      if(result.indexOf(el) === -1) {
+        result.push(el);
+      }
+    });
+    return result;
+  }
 
+  handleTagsResoults(tags) {
+    const tagResult = this.filterSimmilarTags(tags);
+
+    const newState = { ...this.state };
+    newState.tags = tagResult;
+    console.log(':::::::::::');
+    console.log(tagResult);
+    console.log(':::::::::::');
+    this.setState(() => {({...newState})});
+    console.log('searching for '+tagResult.join(","));    
+    imageData = searchPhotos(tagResult.join(","));
+
+    console.log(':::::::::::');
+    console.log(this.props.images);
+    console.log(':::::::::::');
     console.log(imageData);
+    console.log(':::::::::::');
     const newState2 = { ...this.state };
     newState2.images = imageData;
-    this.setState({...newState2});
-
+    this.setState(() => {({...newState2})});
+    console.log(typeof this.state.images);
   }
 
   handleImagesResults(imageData){
     //console.log(imageData);
     const newState = { ...this.state };
     newState.images = imageData;
+    console.log(':::::::::::');
+    console.log(imageData);
+    console.log(':::::::::::');
     this.setState({...newState});
 
   }
