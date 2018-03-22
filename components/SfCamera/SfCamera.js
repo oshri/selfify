@@ -2,6 +2,7 @@ import React from 'react';
 import { Constants, Camera, FileSystem, Permissions } from 'expo';
 import {
 	StyleSheet,
+	Dimensions,
 	Text,
 	View,
 	TouchableOpacity,
@@ -13,6 +14,8 @@ import {
 import GalleryScreen from '../GalleryScreen/GalleryScreen';
 import isIPhoneX from 'react-native-is-iphonex';
 import { checkForLabels }  from '../../services/googleVision/googleVisionApi';
+
+const { width: viewportWidth, height: viewportHeight } = Dimensions.get('window');
 
 const landmarkSize = 2;
 
@@ -273,7 +276,7 @@ export default class SfCameraScreen extends React.Component {
     return (
       <View style={styles.container}>
         {content}
-        <ActivityIndicator size="large" color="#0000ff" animating={this.state.isLoading}/>
+        <ActivityIndicator style={styles.spinner} size="large" color="#0000ff" animating={this.state.isLoading}/>
       </View>
     );
 	}
@@ -282,7 +285,14 @@ export default class SfCameraScreen extends React.Component {
 const styles = StyleSheet.create({
 	container: {
 		flex: 1,
-		backgroundColor: '#000'
+		backgroundColor: '#000',
+		position: 'relative'
+	},
+	spinner: {
+		position: 'absolute',
+		top: viewportWidth / 2,
+		left: viewportWidth / 2,
+		zIndex: 1000
 	},
 	navigation: {
 		flex: 1
