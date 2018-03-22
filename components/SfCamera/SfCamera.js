@@ -156,6 +156,7 @@ export default class SfCameraScreen extends React.Component {
 
 	renderCard() {
 		return <ImageCard
+					onPress={this.closeImageCard.bind(this)}
 					loading={this.state.isLoading}
 					image={`${FileSystem.documentDirectory}photos/Photo_${this.state.photoId}.jpg`}>
 				</ImageCard>
