@@ -127,7 +127,7 @@ export default class SfCameraScreen extends React.Component {
 
 			FileSystem.moveAsync({
 				from: data.uri,
-				to: `${FileSystem.documentDirectory}photos/Photo_${this.state.photoId}.jpg`,
+				to: `${FileSystem.documentDirectory}photos/Photo_${this.state.photoId + 1}.jpg`,
 			}).then(() => {
 				this.setState({
 					photoId: this.state.photoId + 1,
